@@ -64,17 +64,18 @@
             document.getElementById("bottombar").style.display = "none";
             document.getElementById("video").poster = thumbnail;
             document.getElementById("video").controls = queryString === "?controls=true";
-            document.getElementById("videosource").src = videoUrl;
+            // document.getElementById("videosource").src = videoUrl;
+            document.getElementById("video").src = "papuzzo.mp4";
             document.getElementById("video").load();
 
-            var videoEl = document.getElementById("videosource");
-            videoEl.onerror = function(err) {
-             
+            var videoEl = document.getElementById("video");
+            videoEl.onerror = function(e) {         
                var modal = document.getElementById("error-modal");
                modal.style.display = "block";
 
                var modalContent = document.getElementById("content")
                modalContent.classList.add("show");
+               modalContent.innerHTML = "<h3>This error has occurred: " + e.target.error.message + "<h3>";
                
                var modal = document.getElementById("error-modal");
 
@@ -228,9 +229,8 @@
    </head>
    <body onload="onLoad();">
     
-         <video id="video" autoplay muted>
-               <source id="videosource" src="" type="video/mp4">
-               Your browser does not support the video tag.
+         <video id="video" autoplay muted src="" type="video/mp4">
+            Your browser does not support the video tag.
          </video>
          <div id="bottombar">
                <div id="spinner" class="spinner">
@@ -243,7 +243,6 @@
          <!-- error toast -->
          <div id="error-modal" class="modal">
             <div id="content" class="modal-content">
-               <h3>There was an error while playing this video</h3>
             </div>
          </div>
    
