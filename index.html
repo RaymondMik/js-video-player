@@ -72,10 +72,15 @@
                var modal = document.getElementById("error-modal");
                modal.style.display = "block";
 
-               var modalContent = document.getElementById("content")
+               var modalContent = document.getElementById("modal-content")
                modalContent.classList.add("show");
-               modalContent.innerHTML = "<h3>This error has occurred: " + e.target.error.message + "<h3>";
-               
+
+               if (e.srcElement.error && e.srcElement.error.message) {
+                  modalContent.innerHTML = "<h3>This error has occurred: " + e.srcElement.error.message + "<h3>";
+               } else {
+                  modalContent.innerHTML = "<h3>An error has occured<h3>";
+               }
+ 
                var modal = document.getElementById("error-modal");
 
                setTimeout(() => {
@@ -200,7 +205,7 @@
          }
 
          /* Modal Content/Box */
-         .modal-content {
+         #modal-content {
             margin: 10% auto; 
             padding: 10px;
             overflow-wrap: break-word;
@@ -220,7 +225,7 @@
             text-align: center;
          }
 
-         .modal-content.show {
+         #modal-content.show {
             -webkit-animation: modal-slide-down .4s ease-in-out;
             animation: modal-slide-down .4s ease-in-out;
          }
@@ -241,7 +246,7 @@
 
          <!-- error toast -->
          <div id="error-modal" class="modal">
-            <div id="content" class="modal-content">
+            <div id="modal-content">
             </div>
          </div>
    
