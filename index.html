@@ -64,8 +64,7 @@
             document.getElementById("bottombar").style.display = "none";
             document.getElementById("video").poster = thumbnail;
             document.getElementById("video").controls = queryString === "?controls=true";
-            // document.getElementById("videosource").src = videoUrl;
-            document.getElementById("video").src = "papuzzo.mp4";
+            document.getElementById("videosource").src = videoUrl;
             document.getElementById("video").load();
 
             var videoEl = document.getElementById("video");
