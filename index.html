@@ -61,8 +61,10 @@
             var videoUrl = get(videos, "[" + currentVideo + "].video_url");
             var thumbnail = get(videos, "[" + currentVideo + "].thumbnail_url");
 
-            document.getElementById("spinner").style.display = "none";
+            document.getElementById("bottombar").style.display = "none";
             document.getElementById("video").poster = thumbnail;
+            document.getElementById("video").controls = queryString === "?controls=true";
+            document.getElementById("videosource").src = videoUrl;
             document.getElementById("videosource").src = videoUrl;
             document.getElementById("video").load();
          }
