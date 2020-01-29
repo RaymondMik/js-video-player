@@ -24,6 +24,8 @@
          }
 
          function onLoad() {
+            initLog();
+            
             document.getElementById("video").addEventListener("timeupdate", function() {
                   var videoDiv = document.getElementById("video");
                   var percentage = ((100 / videoDiv.duration) * videoDiv.currentTime).toFixed(2);
@@ -33,22 +35,60 @@
                nextVideo();
             })
 
+            document.getElementById("video").addEventListener("loadstart", function(e) {
+               debugLog("loadstart");
+            });
+
+            document.getElementById("video").addEventListener("loadedmetadata", function(e) {
+               debugLog("loadedmetadata");
+            });
+
+            document.getElementById("video").addEventListener("progress", function(e) {
+               debugLog("progress");
+            });
+
+            document.getElementById("video").addEventListener("error", function(e) {
+               debugLog("error loading video");
+               if (e && e.target && e.target.error && e.target.error.message) {
+                  debugLog(e.target.error.message);
+               }
+
+               /*var modal = document.getElementById("error-modal");
+               modal.style.display = "block";
+   ​
+               var modalContent = document.getElementById("modal-content")
+               modalContent.classList.add("show");
+   ​
+               if (e.target.error && e.target.error.message) {
+                  modalContent.innerHTML = "<h3>This error has occurred: " + e.target.error.message + "<h3>";
+               } else {
+                  modalContent.innerHTML = "<h3>An error has occured<h3>";
+               }
+   ​
+               var modal = document.getElementById("error-modal");*/
+            });
+
             loadFeed()
          }
 
          function loadFeed() {
+            debugLog("load feed");
+
             fetch(feedsUrl)
                   .then(
                      function(response) {
                         if (response.status !== 200) {
+                           debugLog("Error loading feed " + response.status);
                            console.warn('Looks like there was a problem. Status Code: ' + response.status);
                            return;
                         }
 
                         // Examine the text in the response
                         response.json().then(function(data) {
-                              videos = data;
-                              startPlayingVideos(data);
+                           debugLog("loaded feed");
+
+                           videos = data;
+                           startPlayingVideos(data);
                         });
                      }
                   )
@@ -58,31 +98,18 @@
          }
 
          function startPlayingVideos() {
+            debugLog("start playing videos");
+
             var videoUrl = get(videos, "[" + currentVideo + "].video_url");
             var thumbnail = get(videos, "[" + currentVideo + "].thumbnail_url");
+
+            debugLog("going to play " + videoUrl);
 
             document.getElementById("bottombar").style.display = "none";
             document.getElementById("video").poster = "https://vzds.dev/videos/poster.jpg";
             document.getElementById("video").controls = queryString === "?controls=true";
             document.getElementById("video").src = videoUrl;
             document.getElementById("video").load();
-
-            var videoEl = document.getElementById("video");
-            videoEl.onerror = function(e) {         
-               var modal = document.getElementById("error-modal");
-               modal.style.display = "block";
-
-               var modalContent = document.getElementById("modal-content")
-               modalContent.classList.add("show");
-
-               if (e.target.error && e.target.error.message) {
-                  modalContent.innerHTML = "<h3>This error has occurred: " + e.target.error.message + "<h3>";
-               } else {
-                  modalContent.innerHTML = "<h3>An error has occured<h3>";
-               }
- 
-               var modal = document.getElementById("error-modal");
-            };
          }
 
          function nextVideo() {
@@ -93,6 +120,21 @@
             }
 
             startPlayingVideos();
+         }
+
+         function initLog() {
+            var debugView = document.getElementById("log");
+            var enableLog = queryString === "?log=true";
+            if (debugView && enableLog) {
+                  debugView.style.display = "block";
+            }
+         }
+
+         function debugLog(log) {
+            var debugView = document.getElementById("log");
+            if (debugView) {
+               debugView.innerHTML = log + "<br /><br />" + debugView.innerHTML;
+            }
          }
       </script>
       <style type="text/css">
@@ -189,7 +231,7 @@
             }
          }
 
-         /* The Modal (background) */
+         /* Modal
          .modal {
             display: none; 
             position: fixed; 
@@ -203,7 +245,6 @@
             background-color: rgba(0,0,0,0.5); 
          }
 
-         /* Modal Content/Box */
          #modal-content {
             margin: 10% auto; 
             padding: 10px;
@@ -227,6 +268,19 @@
          #modal-content.show {
             -webkit-animation: modal-slide-down .8s ease-in-out;
             animation: modal-slide-down .8s ease-in-out;
+         } */
+
+         #log {
+            display: none;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: black;
+            bottom: 0px;
+            top: 0px;
+            right: 0px;
+            width: 300px;
+            padding: 10px;
+            font-size: 20px;
          }
       </style>
    </head>
@@ -243,11 +297,11 @@
             </div>
          </div>
 
-         <!-- error toast -->
+         <!-- error toast 
          <div id="error-modal" class="modal">
             <div id="modal-content">
             </div>
-         </div>
-   
+         </div> -->
+         <div id="log"></div>
    </body>
 </html>
