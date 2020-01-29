@@ -62,7 +62,7 @@
             var thumbnail = get(videos, "[" + currentVideo + "].thumbnail_url");
 
             document.getElementById("bottombar").style.display = "none";
-            document.getElementById("video").poster = thumbnail;
+            document.getElementById("video").poster = "https://vzds.dev/videos/poster.jpg";
             document.getElementById("video").controls = queryString === "?controls=true";
             document.getElementById("video").src = videoUrl;
             document.getElementById("video").load();
@@ -75,17 +75,13 @@
                var modalContent = document.getElementById("modal-content")
                modalContent.classList.add("show");
 
-               if (e.srcElement.error && e.srcElement.error.message) {
-                  modalContent.innerHTML = "<h3>This error has occurred: " + e.srcElement.error.message + "<h3>";
+               if (e.target.error && e.target.error.message) {
+                  modalContent.innerHTML = "<h3>This error has occurred: " + e.target.error.message + "<h3>";
                } else {
                   modalContent.innerHTML = "<h3>An error has occured<h3>";
                }
  
                var modal = document.getElementById("error-modal");
-
-               setTimeout(() => {
-                  modal.style.display = "none";
-               }, 8000);
             };
          }
 
@@ -138,7 +134,6 @@
             width: 2.5vh;
             height: 2.5vh;
             background-color: white;
-
             border-radius: 100%;
             display: inline-block;
             -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -184,6 +179,10 @@
                -webkit-transform: translateY(-250px);
                transform: translateY(-250px);
             }
+            50% {
+               -webkit-transform: translateY(0px);
+               transform: translateY(0px)
+            }
             100% {
                -webkit-transform: translateY(0px);
                transform: translateY(0px)
@@ -226,8 +225,8 @@
          }
 
          #modal-content.show {
-            -webkit-animation: modal-slide-down .4s ease-in-out;
-            animation: modal-slide-down .4s ease-in-out;
+            -webkit-animation: modal-slide-down .8s ease-in-out;
+            animation: modal-slide-down .8s ease-in-out;
          }
       </style>
    </head>
@@ -237,11 +236,11 @@
             Your browser does not support the video tag.
          </video>
          <div id="bottombar">
-               <div id="spinner" class="spinner">
-                  <div class="bounce1"></div>
-                  <div class="bounce2"></div>
-                  <div class="bounce3"></div>
-               </div>
+            <div id="spinner" class="spinner">
+               <div class="bounce1"></div>
+               <div class="bounce2"></div>
+               <div class="bounce3"></div>
+            </div>
          </div>
 
          <!-- error toast -->
