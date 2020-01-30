@@ -93,6 +93,7 @@
                      }
                   )
                   .catch(function(err) {
+                     debugLog("Error fetching the feedsUrl: " + err);
                      console.error('Fetch Error :-S', err);
                   });
          }
